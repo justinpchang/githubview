@@ -7,7 +7,6 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI');
-const { nextTick } = require('process');
 
 var app = express();
 
@@ -24,22 +23,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/testAPI', testAPIRouter);
-
-app.use((req, res, next) => {
-    let link = req.path;
-    num = link.indexOf('/');
-
-    counter = 0;
-    while (num != -1 && counter < 2){
-        num = link.indexOf('/', num+1);
-        counter++;
-    }
-    if (counter <= 2 && num == -1){
-        num = link.length;
-    }
-
-    res.send(link.slice(0, num));
-})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
