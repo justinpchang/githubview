@@ -8,6 +8,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI');
 var apiTreeRouter = require('./routes/apiTree');
+var repoRouter = require('./routes/repoRouter');
 
 var app = express();
 
@@ -23,28 +24,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// Test endpoint to ensure client-server communication
 app.use('/testAPI', testAPIRouter);
 app.use('/api/tree', apiTreeRouter);
-
-app.use((req, res, next) => {
-    let link = req.path;
-    num = link.indexOf('/');
-
-    counter = 0;
-    while (num != -1 && counter < 2){
-        num = link.indexOf('/', num+1);
-        counter++;
-    }
-    if (counter <= 2 && num == -1){
-        num = link.length;
-    }
-    let arr = link.slice(0, num).split('/');
-    if (arr.length <=2 ){
-        res.sendStatus('404');
-    }
-    let obj = {'user': arr[1], 'repo': arr[2]};
-    res.send(obj);
-});
+// Catch all router for translating url to github repo info
+app.use(repoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
