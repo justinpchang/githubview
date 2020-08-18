@@ -1,23 +1,23 @@
-import React from "react";
+import React from 'react';
 
-import FileBrowser from "react-keyed-file-browser";
+import FileBrowser from 'react-keyed-file-browser';
 import {
   TableHeader,
   TableFolder,
   TableFile,
-} from "./renderers";
+} from './renderers';
 
 class Browser extends React.Component {
   state = {
     files: [
       {
-        key: "README.md",
+        key: 'README.md',
       },
       {
-        key: "direct/nested.js",
+        key: 'direct/nested.js',
       },
       {
-        key: "direct/another/super.js",
+        key: 'direct/another/super.js',
       },
     ],
   };

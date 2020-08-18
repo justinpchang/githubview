@@ -2,12 +2,13 @@ import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col } from 'react-bootstrap';
-import Browser from './components/Browser/Browser';
+import Browser from './components/Browser';
+import Viewer from './components/Viewer';
 
 class App extends React.Component {
   state = {
     apiResponse: '',
-    file: ''
+    filepath: ''
   };
 
   callAPI = () =>
@@ -21,7 +22,7 @@ class App extends React.Component {
   }
 
   handleFileClick = (filepath) => {
-    console.log(filepath);
+    this.setState({ filepath });
   }
 
   render() {
@@ -33,7 +34,9 @@ class App extends React.Component {
             <Col className='container' sm={4}>
               <Browser handleFileClick={this.handleFileClick} />
             </Col>
-            <Col className='container' sm={8}>Code viewer</Col>
+            <Col className='container' sm={8}>
+              <Viewer filepath={this.state.filepath} />
+            </Col>
           </Row>
         </Container>
       </div>
