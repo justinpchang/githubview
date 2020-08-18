@@ -7,6 +7,7 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI');
+var apiTreeRouter = require('./routes/apiTree');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/testAPI', testAPIRouter);
+app.use('/api/tree', apiTreeRouter);
 
 app.use((req, res, next) => {
     let link = req.path;
@@ -36,8 +38,12 @@ app.use((req, res, next) => {
     if (counter <= 2 && num == -1){
         num = link.length;
     }
-
-    res.send(link.slice(0, num));
+    let arr = link.slice(0, num).split('/');
+    if (arr.length <=2 ){
+        res.sendStatus('404');
+    }
+    let obj = {'user': arr[1], 'repo': arr[2]};
+    res.send(obj);
 });
 
 // catch 404 and forward to error handler
