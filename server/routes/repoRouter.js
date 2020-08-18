@@ -1,9 +1,9 @@
-// Translate github url to repo object
+// Translate github url to repo string
 // TODO: validation
 
 const router = (req, res) => {
     const link = req.path;
-    const num = link.indexOf('/');
+    let num = link.indexOf('/');
     
     let counter = 0;
     while (num != -1 && counter < 2){
@@ -13,12 +13,8 @@ const router = (req, res) => {
     if (counter <= 2 && num == -1){
         num = link.length;
     }
-    let arr = link.slice(0, num).split('/');
-    if (arr.length <=2 ){
-        res.sendStatus('404');
-    }
-    let obj = {'user': arr[1], 'repo': arr[2]};
-    res.send(obj);
+    
+    res.send(link.slice(0, num));
 };
 
 module.exports = router;
