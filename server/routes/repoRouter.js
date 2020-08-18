@@ -14,7 +14,7 @@ const router = (req, res) => {
         num = link.length;
     }
     
-    res.send(link.slice(0, num));
+    res.send(link.slice(1, num));
 };
 
 module.exports = router;

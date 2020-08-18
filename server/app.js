@@ -7,7 +7,7 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI');
-var apiTreeRouter = require('./routes/apiTree');
+var treeRouter = require('./routes/treeRouter');
 var repoRouter = require('./routes/repoRouter');
 
 var app = express();
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 // Test endpoint to ensure client-server communication
 app.use('/testAPI', testAPIRouter);
-app.use('/api/tree', apiTreeRouter);
+app.use('/api/tree', treeRouter);
 // Catch all router for translating url to github repo info
 app.use(repoRouter);
 

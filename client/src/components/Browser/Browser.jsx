@@ -25,7 +25,7 @@ class Browser extends React.Component {
   render() {
     return (
       <FileBrowser
-        files={this.state.files}
+        files={this.props.files || this.state.files}
         showActionBar={false}
         headerRenderer={TableHeader}
         fileRenderer={TableFile}
