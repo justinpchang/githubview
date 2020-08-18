@@ -1,3 +1,7 @@
 .App {
-  text-align: center;
+  text-align: left;
+}
+
+.container {
+  border: 1px solid black;
 }
