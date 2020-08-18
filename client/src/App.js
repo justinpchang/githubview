@@ -59,9 +59,7 @@ class App extends React.Component {
   }
 
   handleFileClick = (filepath) => {
-    this.setState({ filepath });
-    // Get file data
-    this.getFile();
+    this.setState({ filepath }, this.getFile);
   };
 
   render() {
