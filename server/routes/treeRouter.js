@@ -17,9 +17,12 @@ router.get('/:user/:repo', function(req, res, next) {
     .then((data) => {
       let obj = { files: [] };
       for (file of data.tree) {
-        obj.files.push({
+        if (file.type !== 'tree') {
+          obj.files.push({
           key: file.path
-        });
+          });
+        }
+
       }
       res.send(obj);
     })
