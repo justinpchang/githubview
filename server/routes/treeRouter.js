@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
 const trees = require('github-trees');
+
+require('dotenv').config()
+
 const opts = {
   recursive: true,
   username: process.env.USERNAME, // To run, need to populate server/.env with USERNAME and PASSWORD vals
@@ -19,7 +21,6 @@ router.get('/:user/:repo', function(req, res, next) {
           key: file.path
         });
       }
-      console.log(obj);
       res.send(obj);
     })
     .catch(console.error);
