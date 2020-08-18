@@ -12,7 +12,7 @@ class Viewer extends React.Component {
         showInlineLineNumbers={true}
         style={docco}
       >
-        {this.props.filepath || 'Click on a file to load it.'}
+        {this.props.file || 'Click on a file to load it.'}
       </SyntaxHighlighter>
     );
   }

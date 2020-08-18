@@ -12,6 +12,7 @@ class App extends React.Component {
     this.state = {
       apiResponse: '',
       filepath: '',
+      file: '',
       repoString: '',
       files: []
     };
@@ -32,12 +33,19 @@ class App extends React.Component {
   };
 
   getFiles = () => {
-    fetch('http://localhost:3001/api/tree/' + this.state.repoString) // TODO: not have leading /
+    fetch('http://localhost:3001/api/tree/' + this.state.repoString)
       .then((res) => res.json())
       .then((res) => {
         this.setState({ files: res.files });
         console.log(this.state.files);
       })
+      .catch((err) => err);
+  }
+
+  getFile = () => {
+    fetch('http://localhost:3001/api/file/' + this.state.repoString + '?filepath=' + Buffer.from(this.state.filepath).toString('base64'))
+      .then((res) => res.text())
+      .then((res) => this.setState({ file: res }))
       .catch((err) => err);
   }
 
@@ -52,6 +60,8 @@ class App extends React.Component {
 
   handleFileClick = (filepath) => {
     this.setState({ filepath });
+    // Get file data
+    this.getFile();
   };
 
   render() {
@@ -65,7 +75,7 @@ class App extends React.Component {
               <Browser files={this.state.files} handleFileClick={this.handleFileClick} />
             </Col>
             <Col className='container' sm={8}>
-              <Viewer filepath={this.state.filepath} />
+              <Viewer file={this.state.file} />
             </Col>
           </Row>
         </Container>
