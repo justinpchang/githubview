@@ -7,7 +7,7 @@ import Browser from './components/Browser';
 import Viewer from './components/Viewer';
 
 // Helpers
-import { getRepoString } from './api';
+import { getRepoString } from './utils';
 
 class App extends React.Component {
   constructor(props) {
