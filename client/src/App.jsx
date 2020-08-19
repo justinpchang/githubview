@@ -6,6 +6,9 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Browser from './components/Browser';
 import Viewer from './components/Viewer';
 
+// Helpers
+import { getRepoString } from './api';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -16,14 +19,6 @@ class App extends React.Component {
       files: []
     };
   }
-
-  getRepoString = async () => {
-    console.log('http://localhost:3001' + this.props.location.pathname);
-    return fetch('http://localhost:3001' + this.props.location.pathname)
-      .then((res) => res.text())
-      .then((res) => this.setState({ repoString: res }))
-      .catch((err) => err);
-  };
 
   getFiles = () => {
     fetch('http://localhost:3001/api/tree/' + this.state.repoString)
@@ -43,8 +38,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getRepoString()
-      .then(() => {
+    getRepoString(this.props.location.pathname)
+      .then((repoString) => {
+        this.setState({ repoString });
         // Need some kind of loading screen to wait for this response
         this.getFiles();
       });
