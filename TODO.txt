@@ -1,0 +1,10 @@
+Client:
+- Landing page at /
+- Styling
+- Clean up code
+- Error handling for API requests
+- Tests
+
+Server:
+- Error handling
+- Server-side caching?
