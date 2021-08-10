@@ -6,24 +6,23 @@ const opts = {
     password: 'jBanana01!',
 };
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
     const [user, repo] = req.query.slug;
-    console.log(user, repo)
-    trees(`${user}/${repo}`, opts)
-        .then((data) => {
-            let obj = { files: [] };
-            for (const file of data.tree) {
-                if (file.type !== 'tree') {
-                    obj.files.push({
-                        key: file.path,
-                    });
-                }
-            }
 
-            res.status(200).json(obj);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('failed!');
-        });
+    try {
+        let obj = { files: [] };
+        const data = await trees(`${user}/${repo}`, opts)
+
+        for (const file of data.tree) {
+            if (file.type !== 'tree') {
+                obj.files.push({
+                    key: file.path,
+                });
+            }
+        }
+
+        res.status(200).json(obj);
+    } catch (err) {
+        res.status(500).send('failed!');
+    }
 }
