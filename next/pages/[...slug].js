@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 const Browser = dynamic(() => import('../components/Browser'), {
     ssr: false,
 });
+const Viewer = dynamic(() => import('../components/Viewer'), {
+    ssr: false,
+});
 
 const files = [
     {
@@ -17,7 +20,7 @@ const files = [
     },
 ];
 
-export default function Viewer() {
+export default function Home() {
     const router = useRouter();
     const { slug } = router.query;
 
@@ -26,8 +29,9 @@ export default function Viewer() {
     };
 
     return (
-        <>
+        <div class="container">
             <Browser files={files} handleFileClick={handleFileClick} />
-        </>
+            <Viewer />
+        </div>
     );
 };
