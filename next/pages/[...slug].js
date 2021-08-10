@@ -1,12 +1,33 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+
+const Browser = dynamic(() => import('../components/Browser'), {
+    ssr: false,
+});
+
+const files = [
+    {
+        key: 'README.md',
+    },
+    {
+        key: 'direct/nested.js',
+    },
+    {
+        key: 'direct/another/super.js',
+    },
+];
 
 export default function Viewer() {
     const router = useRouter();
     const { slug } = router.query;
 
-    console.log(slug);
+    const handleFileClick = (filepath) => {
+        console.log(filepath);
+    };
 
-    return <>
-        <h1>Hello</h1>
-    </>;
+    return (
+        <>
+            <Browser files={files} handleFileClick={handleFileClick} />
+        </>
+    );
 };
