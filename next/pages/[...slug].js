@@ -29,9 +29,15 @@ export default function Home() {
     };
 
     return (
-        <div class="container">
-            <Browser files={files} handleFileClick={handleFileClick} />
-            <Viewer />
+        <div className="container mt-3">
+            <div className="row">
+                <div className="col-2">
+                    <Browser files={files} handleFileClick={handleFileClick} />
+                </div>
+                <div className="col">
+                    <Viewer />
+                </div>
+            </div>
         </div>
     );
 };
