@@ -2,12 +2,13 @@ import trees from 'github-trees';
 
 const opts = {
     recursive: true,
-    username: process.env.GITHUB_USERNAME,
-    password: process.env.GITHUB_PASSWORD,
+    username: 'justinpchang',
+    password: 'jBanana01!',
 };
 
 export default function handler(req, res) {
     const [user, repo] = req.query.slug;
+    console.log(user, repo)
     trees(`${user}/${repo}`, opts)
         .then((data) => {
             let obj = { files: [] };
@@ -23,6 +24,6 @@ export default function handler(req, res) {
         })
         .catch((err) => {
             console.error(err);
-            res.status(500).end('failed!');
+            res.status(500).send('failed!');
         });
 }
