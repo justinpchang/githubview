@@ -50,14 +50,12 @@ export default function Home() {
                     )}
                 </div>
                 <div className="col">
-                    {fileError ? (
-                        <h1>ERROR</h1>
-                    ) : fileLoading ? (
+                    {fileLoading ? (
                         <div className="spinner-border" role="status">
                             <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
-                        <Viewer file={file} />
+                        <Viewer file={!fileError && file} />
                     )}
                 </div>
             </div>
