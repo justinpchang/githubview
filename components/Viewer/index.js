@@ -10,6 +10,7 @@ export default function Viewer({ file }) {
             showLineNumbers={true}
             showInlineLineNumbers={true}
             style={docco}
+            className="viewer"
         >
             {file || 'Click on a file to load it.'}
         </SyntaxHighlighter>

@@ -25,8 +25,8 @@ export default function Home() {
     return (
         <>
             <Navbar />
-            <div className="container mt-3">
-                <div className="row">
+            <div className="container w-100">
+                <div className="row flex-lg-nowrap">
                     <div className="col-2">
                         {filesError ? (
                             <h1>ERROR</h1>
