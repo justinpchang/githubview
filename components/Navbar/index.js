@@ -1,8 +1,10 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/client';
 
 export default function Navbar() {
+    const router = useRouter();
     const [session, loading] = useSession();
     const [repo, setRepo] = React.useState('');
 
@@ -12,12 +14,12 @@ export default function Navbar() {
 
     const submitRepo = (e) => {
         e.preventDefault();
-        window.location = '/' + repo;
+        router.push('/' + repo);
     };
 
     const handleSignOut = async () => {
         await signOut();
-        window.location = '/';
+        router.push('/');
     };
 
     const handleSignIn = async () => {
@@ -28,7 +30,7 @@ export default function Navbar() {
         <nav className="navbar navbar-light bg-light">
             <div className="container-fluid">
                 <Link href="/">
-                    <a className="navbar-brand" href="/">
+                    <a className="navbar-brand">
                         GithubView
                     </a>
                 </Link>
