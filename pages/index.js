@@ -3,8 +3,6 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 export default function Home() {
     const [session, loading] = useSession();
 
-    console.log(session);
-
     return (
         <div className="container position-relative">
             <h1 className="display-3 text-center mt-5">
