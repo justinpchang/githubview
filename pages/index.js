@@ -12,7 +12,6 @@ export default function Home() {
                     Navigate to a GitHub repo and replace the base URL with{' '}
                     <pre>githubview.vercel.app</pre>
                 </p>
-                <br />
             </div>
         </>
     );
