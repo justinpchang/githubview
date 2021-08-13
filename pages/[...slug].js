@@ -2,6 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useFile, useFiles } from '../utils/api';
+import Navbar from '../components/Navbar';
 
 const Browser = dynamic(() => import('../components/Browser'), {
     ssr: false,
@@ -38,30 +39,33 @@ export default function Home() {
     };
 
     return (
-        <div className="container mt-3">
-            <div className="row">
-                <div className="col-2">
-                    <Browser files={mockTree} />
-                    {/*filesError ? (
-                        <h1>ERROR</h1>
-                    ) : filesLoading ? (
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    ) : (
-                        <Browser files={files} handleFileClick={handleFileClick} />
-                    )*/}
-                </div>
-                <div className="col">
-                    {fileLoading ? (
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    ) : (
-                        <Viewer file={!fileError && file} />
-                    )}
+        <>
+            <Navbar />
+            <div className="container mt-3">
+                <div className="row">
+                    <div className="col-2">
+                        <Browser files={mockTree} />
+                        {/*filesError ? (
+                            <h1>ERROR</h1>
+                        ) : filesLoading ? (
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        ) : (
+                            <Browser files={files} handleFileClick={handleFileClick} />
+                        )*/}
+                    </div>
+                    <div className="col">
+                        {fileLoading ? (
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        ) : (
+                            <Viewer file={!fileError && file} />
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
