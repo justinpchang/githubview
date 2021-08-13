@@ -2,7 +2,7 @@ import React from 'react';
 import { space } from '../../../utils/text';
 import { icon, type } from '../../../utils/file';
 
-export default function BrowserFile({ newKey, fileKey, handleFileClick }) {
+export default function BrowserFile({ newKey, fileKey, handleFileClick, hovering }) {
     const key = newKey || fileKey;
     const nestingLevel = key.split('/').length - 1;
     const slashIndex = key.lastIndexOf('/');
@@ -11,7 +11,7 @@ export default function BrowserFile({ newKey, fileKey, handleFileClick }) {
     return (
         <tr onClick={() => handleFileClick(fileKey)}>
             <td className="browser-name text-nowrap">
-                {space(nestingLevel)}
+                {space(nestingLevel, hovering)}
                 {icon(type(name))}
                 {name}
             </td>

@@ -7,9 +7,8 @@ export default class BrowserFolder extends BaseFolder {
     render() {
         return (
             <tr onClick={this.handleFolderDoubleClick}>
-                {console.log(this.props)}
                 <td className="browser-name">
-                    {space(this.props.fileKey.split('/').length - 2)}
+                    {space(this.props.fileKey.split('/').length - 2, this.props.hovering)}
                     {this.props.isOpen ? <IoChevronDownOutline className="icon" /> : <IoChevronForwardOutline className="icon" />}
                     {this.props.name}
                 </td>

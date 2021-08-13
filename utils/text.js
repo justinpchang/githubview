@@ -1,3 +1,3 @@
-export function space(nestingLevel) {
-    return Array(nestingLevel).fill(<span className="">&nbsp;&nbsp;</span>);
+export function space(nestingLevel, hovering) {
+    return Array(nestingLevel).fill(<span><span style={{borderRight: `1px solid ${hovering ? 'lightgrey' : 'white'}`}}>&nbsp;</span>&nbsp;</span>);
 }
