@@ -10,7 +10,7 @@ export default function Home() {
             </h1>
             <p className="lead text-center mt-5">
                 Navigate to a GitHub repo and replace the base URL with{' '}
-                <pre>githubview.com</pre>
+                <pre>githubview.vercel.app</pre>
             </p>
             <br />
             {!session ? <>
