@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/client';
 
 export default function Navbar() {
@@ -26,9 +27,11 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-light bg-light">
             <div className="container-fluid">
-                <a className="navbar-brand" href="/">
-                    GithubView
-                </a>
+                <Link href="/">
+                    <a className="navbar-brand" href="/">
+                        GithubView
+                    </a>
+                </Link>
                 {!loading &&
                     (session ? (
                         <>
