@@ -1,19 +1,18 @@
 import React from 'react';
 import { BaseFolder } from 'react-keyed-file-browser';
+import { IoChevronForwardOutline, IoChevronDownOutline } from 'react-icons/io5';
+import { space } from '../../../utils/text';
 
 export default class BrowserFolder extends BaseFolder {
-    getName() {
-        const nestingLevel = this.props.fileKey.split('/').length - 2;
-        return `${'-'.repeat(nestingLevel)} ${this.props.name}`;
-    }
-
     render() {
         return (
-            <tr
-                style={{ fontWeight: 'bold' }}
-                onClick={this.handleFolderDoubleClick}
-            >
-                <td>{this.getName()}</td>
+            <tr onClick={this.handleFolderDoubleClick}>
+                {console.log(this.props)}
+                <td className="browser-name">
+                    {space(this.props.fileKey.split('/').length - 2)}
+                    {this.props.isOpen ? <IoChevronDownOutline className="icon" /> : <IoChevronForwardOutline className="icon" />}
+                    {this.props.name}
+                </td>
             </tr>
         );
     }

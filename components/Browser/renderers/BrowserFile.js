@@ -1,22 +1,20 @@
 import React from 'react';
+import { space } from '../../../utils/text';
+import { icon, type } from '../../../utils/file';
 
 export default function BrowserFile({ newKey, fileKey, handleFileClick }) {
-    const getName = () => {
-        let name = newKey || fileKey;
-        const nestingLevel = name.split('/').length - 1;
-
-        // Remove preceding path
-        const slashIndex = name.lastIndexOf('/');
-        if (slashIndex !== -1) {
-            name = name.substr(slashIndex + 1);
-        }
-
-        return `${'-'.repeat(nestingLevel)} ${name}`;
-    };
+    const key = newKey || fileKey;
+    const nestingLevel = key.split('/').length - 1;
+    const slashIndex = key.lastIndexOf('/');
+    const name = slashIndex !== -1 ? key.substr(slashIndex + 1) : key;
 
     return (
         <tr onClick={() => handleFileClick(fileKey)}>
-            <td>{getName()}</td>
+            <td className="browser-name text-nowrap">
+                {space(nestingLevel)}
+                {icon(type(name))}
+                {name}
+            </td>
         </tr>
     );
 }
