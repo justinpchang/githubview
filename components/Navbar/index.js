@@ -20,7 +20,7 @@ export default function Navbar() {
     };
 
     const handleSignIn = async () => {
-        await signIn();
+        await signIn('github');
     };
 
     return (
@@ -38,6 +38,7 @@ export default function Navbar() {
                                     type="search"
                                     placeholder="owner/repository"
                                     aria-label="owner/repository"
+                                    style={{ fontFamily: 'Courier New' }}
                                     value={repo}
                                     onChange={changeRepo}
                                 />
