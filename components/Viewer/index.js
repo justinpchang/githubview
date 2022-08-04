@@ -3,10 +3,10 @@ import React from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-export default function Viewer({ file }) {
+export default function Viewer({ language, file }) {
     return (
         <SyntaxHighlighter
-            language="javascript"
+            language={language || 'text'}
             showLineNumbers={true}
             showInlineLineNumbers={true}
             style={docco}

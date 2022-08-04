@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useFile, useFiles } from '../utils/api';
 import Navbar from '../components/Navbar';
+import { type, language } from '../utils/file';
 
 const Browser = dynamic(() => import('../components/Browser'), {
     ssr: false,
@@ -32,23 +33,37 @@ export default function Home() {
                             <h1>ERROR</h1>
                         ) : filesLoading ? (
                             <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Loading...</span>
+                                <span className="visually-hidden">
+                                    Loading...
+                                </span>
                             </div>
                         ) : (
-                            <Browser files={files} handleFileClick={handleFileClick} />
+                            <Browser
+                                files={files}
+                                handleFileClick={handleFileClick}
+                            />
                         )}
                     </div>
                     <div className="col">
                         {fileLoading ? (
                             <div className="spinner-border" role="status">
-                                <span className="visually-hidden">Loading...</span>
+                                <span className="visually-hidden">
+                                    Loading...
+                                </span>
                             </div>
                         ) : (
-                            <Viewer file={!fileError && file} />
+                            <Viewer
+                                language={
+                                    !fileError &&
+                                    file &&
+                                    language(type(filepath))
+                                }
+                                file={!fileError && file}
+                            />
                         )}
                     </div>
                 </div>
             </div>
         </>
     );
-};
+}

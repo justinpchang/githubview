@@ -1,4 +1,13 @@
-import { DiJavascript1, DiGitMerge, DiDocker, DiJava, DiPython, DiSwift } from 'react-icons/di';
+import {
+    DiJavascript1,
+    DiGitMerge,
+    DiDocker,
+    DiJava,
+    DiPython,
+    DiSwift,
+    DiRuby,
+    DiCode,
+} from 'react-icons/di';
 import { BsTextLeft, BsHash } from 'react-icons/bs';
 import { VscJson } from 'react-icons/vsc';
 import { AiOutlineInfoCircle, AiOutlineLock } from 'react-icons/ai';
@@ -6,7 +15,24 @@ import { BiFontFamily, BiImageAlt } from 'react-icons/bi';
 import { GiHouseKeys } from 'react-icons/gi';
 
 export function type(filepath) {
-    return filepath.split('.').pop().toLowerCase();
+    return filepath?.split('.').pop().toLowerCase();
+}
+
+export function language(type) {
+    switch (type) {
+        case 'js':
+        case 'jsx':
+            return 'javascript';
+        case 'md':
+            return 'markdown';
+        case 'rb':
+            return 'ruby';
+        case 'ts':
+        case 'tsx':
+            return 'typescript';
+        default:
+            return type;
+    }
 }
 
 export function icon(type) {
@@ -32,7 +58,7 @@ export function icon(type) {
             return <DiJavascript1 className="icon" />;
         case 'json':
         case 'yml':
-            return <VscJson className="icon" />
+            return <VscJson className="icon" />;
         case 'license':
             return <GiHouseKeys className="icon" />;
         case 'lock':
@@ -46,7 +72,7 @@ export function icon(type) {
         case 'swift':
             return <DiSwift className="icon" />;
         case 'ttf':
-            return <BiFontFamily className="icon" />
+            return <BiFontFamily className="icon" />;
         // images
         case 'jpg':
         case 'jpeg':
@@ -66,5 +92,5 @@ export function icon(type) {
             return <BiImageAlt className="icon" />;
         default:
             return <BsTextLeft className="icon" />;
-    };
+    }
 }
