@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getSession } from 'next-auth/client';
+import { Octokit } from 'octokit';
 
 export default async function handler(req, res) {
     const [user, repo] = req.query.slug;
@@ -11,28 +12,31 @@ export default async function handler(req, res) {
             return;
         }
 
-        // Get data from Github API
+        const octokit = new Octokit({
+            auth: session.accessToken,
+        });
+
         const token = Buffer.from(
             `${session.username}:${session.accessToken}`,
             'utf8'
         ).toString('base64');
         const commits = (
-            await axios.get(
-                `https://api.github.com/repos/${user}/${repo}/commits`,
+            await octokit.request(
+                `GET https://api.github.com/repos/${user}/${repo}/commits`,
                 {
                     headers: {
-                        Authorization: `Basic ${token}`,
+                        'X-Github-Api-Version': '2022-11-28',
                     },
                 }
             )
         ).data;
         const sha = commits[0].sha;
         const tree = (
-            await axios.get(
-                `https://api.github.com/repos/${user}/${repo}/git/trees/${sha}?recursive=true`,
+            await octokit.request(
+                `GET https://api.github.com/repos/${user}/${repo}/git/trees/${sha}?recursive=true`,
                 {
                     headers: {
-                        Authorization: `Basic ${token}`,
+                        'X-Github-Api-Version': '2022-11-28',
                     },
                 }
             )
