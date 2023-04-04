@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { getSession } from 'next-auth/client';
 import { Octokit } from 'octokit';
 
@@ -7,19 +6,21 @@ export default async function handler(req, res) {
 
     try {
         const session = await getSession({ req });
+        /*
         if (!session?.username || !session?.accessToken) {
             res.status(401).send('not logged in');
             return;
         }
+        */
 
-        const octokit = new Octokit({
-            auth: session.accessToken,
-        });
+        const octokit = new Octokit(
+            session
+                ? {
+                      auth: session.accessToken,
+                  }
+                : {}
+        );
 
-        const token = Buffer.from(
-            `${session.username}:${session.accessToken}`,
-            'utf8'
-        ).toString('base64');
         const commits = (
             await octokit.request(
                 `GET https://api.github.com/repos/${user}/${repo}/commits`,
