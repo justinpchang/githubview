@@ -23,7 +23,7 @@ export default async function handler(req, res) {
 
     try {
         const response = await octokit.request(
-            `GET /repos/${user}/${repo}/contents/${filepath}`
+            `GET /repos/${user}/${repo}/contents/readme.md?ref=master`
         );
         res.status(200).send(response.data.download_url);
     } catch (err) {

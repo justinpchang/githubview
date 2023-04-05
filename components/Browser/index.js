@@ -7,7 +7,10 @@ export default function Browser({ files, handleFileClick }) {
     const [hovering, setHovering] = React.useState(false);
 
     return files ? (
-        <div onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
+        <div
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+        >
             <FileBrowser
                 files={files}
                 showActionBar={false}

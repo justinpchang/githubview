@@ -37,6 +37,8 @@ export default async function handler(req, res) {
             )
         ).data.tree;
 
+        console.log(tree);
+
         let obj = { files: [] };
         for (const file of tree) {
             if (file.type !== 'tree') {
@@ -45,6 +47,7 @@ export default async function handler(req, res) {
                 });
             }
         }
+        console.log(obj);
 
         res.status(200).json(obj);
     } catch (err) {
