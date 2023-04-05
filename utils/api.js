@@ -33,25 +33,33 @@ export function useFile(repopath, filepath) {
     const [error, setError] = useState();
 
     useEffect(() => {
-        if (!repopath || !filepath) return;
+        (async () => {
+            if (!repopath || !filepath) return;
 
-        setFile();
-        setError();
-        axios
-            .get(
-                `/api/file/${repopath}?filepath=${Buffer.from(
-                    filepath
-                ).toString('base64')}`,
-                {
-                    transformResponse: (r) => r,
-                }
-            )
-            .then((res) => {
-                setFile(res.data);
-            })
-            .catch((err) => {
+            setFile();
+            setError();
+
+            try {
+                const fileUrl = (
+                    await axios.get(
+                        `/api/file/${repopath}?filepath=${Buffer.from(
+                            filepath
+                        ).toString('base64')}`
+                    )
+                ).data;
+
+                const fileBlob = (
+                    await axios.get(fileUrl, { responseType: 'blob' })
+                ).data;
+
+                const fileText = await new Response(fileBlob).text();
+
+                setFile(fileText);
+            } catch (err) {
+                console.error(err);
                 setError(err);
-            });
+            }
+        })();
     }, [repopath, filepath]);
 
     return {

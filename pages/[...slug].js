@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useFile, useFiles } from '../utils/api';
 import Navbar from '../components/Navbar';
 import { type, language } from '../utils/file';
+import { useSession } from 'next-auth/client';
 
 const Browser = dynamic(() => import('../components/Browser'), {
     ssr: false,
@@ -14,6 +15,7 @@ const Viewer = dynamic(() => import('../components/Viewer'), {
 
 export default function Home() {
     const router = useRouter();
+    const [session] = useSession();
     const { slug } = router.query;
     const [filepath, setFilepath] = React.useState(['']);
     const { files, filesLoading, filesError } = useFiles(slug?.join('/'));
@@ -28,40 +30,61 @@ export default function Home() {
             <Navbar />
             <div className="container w-100">
                 <div className="row flex-lg-nowrap">
-                    <div className="col-2">
-                        {filesError ? (
-                            <h1>ERROR</h1>
-                        ) : filesLoading ? (
-                            <div className="spinner-border" role="status">
-                                <span className="visually-hidden">
-                                    Loading...
-                                </span>
+                    {filesError ? (
+                        <p className="lead text-center mt-5">
+                            Could not find repository/file.
+                            {!session && (
+                                <>
+                                    <br />
+                                    You must sign in to view private
+                                    repositories.
+                                </>
+                            )}
+                        </p>
+                    ) : (
+                        <>
+                            <div className="col-2">
+                                {filesError ? (
+                                    <h1>Error</h1>
+                                ) : filesLoading ? (
+                                    <div
+                                        className="spinner-border"
+                                        role="status"
+                                    >
+                                        <span className="visually-hidden">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <Browser
+                                        files={files}
+                                        handleFileClick={handleFileClick}
+                                    />
+                                )}
                             </div>
-                        ) : (
-                            <Browser
-                                files={files}
-                                handleFileClick={handleFileClick}
-                            />
-                        )}
-                    </div>
-                    <div className="col">
-                        {fileLoading ? (
-                            <div className="spinner-border" role="status">
-                                <span className="visually-hidden">
-                                    Loading...
-                                </span>
+                            <div className="col">
+                                {fileLoading ? (
+                                    <div
+                                        className="spinner-border"
+                                        role="status"
+                                    >
+                                        <span className="visually-hidden">
+                                            Loading...
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <Viewer
+                                        language={
+                                            !fileError &&
+                                            file &&
+                                            language(type(filepath))
+                                        }
+                                        file={!fileError && file}
+                                    />
+                                )}
                             </div>
-                        ) : (
-                            <Viewer
-                                language={
-                                    !fileError &&
-                                    file &&
-                                    language(type(filepath))
-                                }
-                                file={!fileError && file}
-                            />
-                        )}
-                    </div>
+                        </>
+                    )}
                 </div>
             </div>
         </>

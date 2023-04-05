@@ -6,12 +6,6 @@ export default async function handler(req, res) {
 
     try {
         const session = await getSession({ req });
-        /*
-        if (!session?.username || !session?.accessToken) {
-            res.status(401).send('not logged in');
-            return;
-        }
-        */
 
         const octokit = new Octokit(
             session
