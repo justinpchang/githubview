@@ -36,7 +36,7 @@ export default function Home() {
                             {!session && (
                                 <>
                                     <br />
-                                    You must sign in to view private
+                                    You must sign in to view your private
                                     repositories.
                                 </>
                             )}
