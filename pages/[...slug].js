@@ -24,7 +24,10 @@ export default function Home() {
     const { repo, branch, filepath } = parseGithubUrl(slug?.join('/')) || {};
 
     const [files, setFiles] = useState([]);
+    const [isFilesLoading, setIsFilesLoading] = useState(true);
+    const [isFilesError, setIsFilesError] = useState(false);
     const [file, setFile] = useState('');
+    const [isFileLoading, setIsFileLoading] = useState(false);
 
     const octokit = new Octokit(session ? { auth: session.accessToken } : {});
 
@@ -32,37 +35,48 @@ export default function Home() {
         (async () => {
             if (!repo) return;
 
-            const commits = (
-                await octokit.request(
-                    `GET https://api.github.com/repos/${repo}/commits`
-                )
-            ).data;
-            const sha = commits[0].sha;
+            setIsFilesLoading(true);
+            setIsFilesError(false);
 
-            const tree = (
-                await octokit.request(
-                    `GET https://api.github.com/repos/${repo}/git/trees/${sha}?recursive=true`
-                )
-            ).data.tree;
+            try {
+                const commits = (
+                    await octokit.request(
+                        `GET https://api.github.com/repos/${repo}/commits`
+                    )
+                ).data;
+                const sha = commits[0].sha;
 
-            setFiles(
-                tree.flatMap((file) => {
-                    if (file.type !== 'tree') {
-                        return [{ key: file.path, url: file.url }];
-                    }
-                    return [];
-                })
-            );
+                const tree = (
+                    await octokit.request(
+                        `GET https://api.github.com/repos/${repo}/git/trees/${sha}?recursive=true`
+                    )
+                ).data.tree;
+
+                setFiles(
+                    tree.flatMap((file) => {
+                        if (file.type !== 'tree') {
+                            return [{ key: file.path, url: file.url }];
+                        }
+                        return [];
+                    })
+                );
+            } catch (err) {
+                setIsFilesError(true);
+                console.error(err);
+            }
+            setIsFilesLoading(false);
         })();
     }, [session, slug]);
 
     const handleFileClick = async (filepath) => {
+        setIsFileLoading(true);
         const url = (
             await octokit.request(`GET /repos/${repo}/contents/${filepath}`)
         ).data.download_url;
         const blob = (await axios.get(url, { responseType: 'blob' })).data;
         const text = await new Response(blob).text();
         setFile(text);
+        setIsFileLoading(false);
     };
 
     return (
@@ -70,29 +84,7 @@ export default function Home() {
             <Navbar />
             <div className="container w-100">
                 <div className="row flex-lg-nowrap">
-                    <div className="col-2">
-                        <Browser
-                            files={files}
-                            handleFileClick={handleFileClick}
-                        />
-                    </div>
-                    <div className="col">
-                        <Viewer
-                            language={file && language(type(filepath))}
-                            file={file}
-                        />
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-
-    return (
-        <>
-            <Navbar />
-            <div className="container w-100">
-                <div className="row flex-lg-nowrap">
-                    {filesError ? (
+                    {isFilesError ? (
                         <p className="lead text-center mt-5">
                             Could not find repository/file.
                             {!session && (
@@ -106,9 +98,7 @@ export default function Home() {
                     ) : (
                         <>
                             <div className="col-2">
-                                {filesError ? (
-                                    <h1>Error</h1>
-                                ) : filesLoading ? (
+                                {isFilesLoading ? (
                                     <div
                                         className="spinner-border"
                                         role="status"
@@ -119,13 +109,13 @@ export default function Home() {
                                     </div>
                                 ) : (
                                     <Browser
-                                        files={{ files }}
+                                        files={files}
                                         handleFileClick={handleFileClick}
                                     />
                                 )}
                             </div>
                             <div className="col">
-                                {fileLoading ? (
+                                {isFileLoading ? (
                                     <div
                                         className="spinner-border"
                                         role="status"
@@ -137,11 +127,9 @@ export default function Home() {
                                 ) : (
                                     <Viewer
                                         language={
-                                            !fileError &&
-                                            file &&
-                                            language(type(filepath))
+                                            file && language(type(filepath))
                                         }
-                                        file={!fileError && file}
+                                        file={file}
                                     />
                                 )}
                             </div>
