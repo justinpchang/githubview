@@ -22,7 +22,6 @@ export default function Home() {
 
     const { slug } = router.query;
     const { repo, branch, filepath } = parseGithubUrl(slug?.join('/')) || {};
-    console.log(parseGithubUrl(slug?.join('/')));
 
     const [files, setFiles] = useState([]);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
@@ -98,7 +97,13 @@ export default function Home() {
         })();
     }, [repo, branch]);
 
-    const handleFileClick = async (filepath) => {
+    useEffect(() => {
+        (async () => {
+            if (filepath) await getFile(filepath);
+        })();
+    }, [filepath]);
+
+    const getFile = async (filepath) => {
         setIsFileLoading(true);
         const url = (
             await octokit.request(`GET /repos/${repo}/contents/${filepath}`)
@@ -107,6 +112,12 @@ export default function Home() {
         const text = await new Response(blob).text();
         setFile(text);
         setIsFileLoading(false);
+    };
+
+    const handleFileClick = async (filepath) => {
+        router.push({
+            pathname: `/${repo}/blob/${currentBranch}/${filepath}`,
+        });
     };
 
     return (
