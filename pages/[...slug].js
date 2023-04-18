@@ -22,12 +22,15 @@ export default function Home() {
 
     const { slug } = router.query;
     const { repo, branch, filepath } = parseGithubUrl(slug?.join('/')) || {};
+    console.log(parseGithubUrl(slug?.join('/')));
 
     const [files, setFiles] = useState([]);
     const [isFilesLoading, setIsFilesLoading] = useState(true);
     const [isFilesError, setIsFilesError] = useState(false);
     const [file, setFile] = useState('');
     const [isFileLoading, setIsFileLoading] = useState(false);
+
+    const [currentBranch, setCurrentBranch] = useState();
 
     const octokit = new Octokit(session ? { auth: session.accessToken } : {});
 
@@ -39,9 +42,12 @@ export default function Home() {
             setIsFilesError(false);
 
             try {
+                // Get tree
                 const commits = (
                     await octokit.request(
-                        `GET https://api.github.com/repos/${repo}/commits`
+                        branch === 'master'
+                            ? `GET https://api.github.com/repos/${repo}/commits`
+                            : `GET https://api.github.com/repos/${repo}/commits?sha=${branch}`
                     )
                 ).data;
                 const sha = commits[0].sha;
@@ -51,6 +57,30 @@ export default function Home() {
                         `GET https://api.github.com/repos/${repo}/git/trees/${sha}?recursive=true`
                     )
                 ).data.tree;
+
+                // Get name of branch
+                if (branch === 'master') {
+                    octokit
+                        .request(
+                            `GET https://api.github.com/repos/${repo}/commits/${sha}/branches-where-head`
+                        )
+                        .then((res) => {
+                            res.data.forEach(({ name }) => {
+                                if (name === 'master') {
+                                    setCurrentBranch('master');
+                                    return;
+                                }
+                                if (name === 'main') {
+                                    console.log('main');
+                                    setCurrentBranch('main');
+                                    return;
+                                }
+                            });
+                            setCurrentBranch(res.data[0].name);
+                        });
+                } else {
+                    setCurrentBranch(branch);
+                }
 
                 setFiles(
                     tree.flatMap((file) => {
@@ -66,7 +96,7 @@ export default function Home() {
             }
             setIsFilesLoading(false);
         })();
-    }, [session, slug]);
+    }, [repo, branch]);
 
     const handleFileClick = async (filepath) => {
         setIsFileLoading(true);
